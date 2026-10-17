@@ -36,6 +36,13 @@ frontend (React + Vite)  →  backend (Express + TS)  →  Supabase
 ## QR code
 Deploy the frontend (or use the Network URL during testing) and turn that URL into a QR code with any free generator.
 
+## Deploy (Railway)
+One service runs everything: `npm run build` builds the frontend into `frontend/dist`, and `npm start` runs the Express API, which also serves that build. Railway picks up both scripts from the root `package.json`.
+
+1. Create a service from this repo (root directory: the repo root).
+2. Under **Variables**, add `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` and `CORE_NICKNAMES`. Don't set `PORT`; Railway sets it.
+3. Under **Networking**, generate a public domain. That URL is the one for the QR code.
+
 ## Notes
 - The raw free text is stored next to the normalized items (`sessions.items_raw`), so logs can be normalized again if the categories change.
 - To change the categories, edit the `categories` table. The normalizer prompt is built from that table.

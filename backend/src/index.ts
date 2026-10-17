@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { fileURLToPath } from "node:url";
 import express, { type NextFunction, type Request, type Response } from "express";
 import cors from "cors";
 import { supabase, getCategories } from "./supabase";
@@ -194,6 +195,11 @@ app.post("/api/summaries", async (req, res, next) => {
     next(e);
   }
 });
+
+// In production the same server serves the built frontend; every non-API path falls back to the SPA.
+const webDir = fileURLToPath(new URL("../../frontend/dist", import.meta.url));
+app.use(express.static(webDir));
+app.get(/^(?!\/api\/).*/, (_req, res) => res.sendFile("index.html", { root: webDir }));
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
